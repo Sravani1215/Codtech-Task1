@@ -1,0 +1,79 @@
+// Importing necessary Java I/O and utility libraries
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
+
+public class Main {
+
+    // Method to write content to a text file
+    public static void writeFile(String fileName, String content) {
+        try (
+            // Create a BufferedWriter to write to the file
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))
+        ) {
+            writer.write(content); // Write the content to the file
+            System.out.println("File written successfully.");
+        } catch (IOException e) {
+            // Catch and print any file writing errors
+            System.out.println("Error writing file: " + e.getMessage());
+        }
+    }
+
+    // Method to read and display content from a text file
+    public static void readFile(String fileName) {
+        try (
+            // Create a BufferedReader to read from the file
+            BufferedReader reader = new BufferedReader(new FileReader(fileName))
+        ) {
+            String line;
+            System.out.println("File content:");
+            // Read each line until end of file
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line); // Print each line to the console
+            }
+        } catch (IOException e) {
+            // Catch and print any file reading errors
+            System.out.println("Error reading file: " + e.getMessage());
+        }
+    }
+
+    // Method to modify text in the file (replace oldWord with newWord)
+    public static void modifyFile(String fileName, String oldWord, String newWord) {
+        try {
+            // Get the file path
+            Path path = Paths.get(fileName);
+
+            // Read the entire file content as a single string
+            String content = Files.readString(path);
+
+            // Replace all occurrences of oldWord with newWord
+            content = content.replaceAll(oldWord, newWord);
+
+            // Write the modified content back to the file
+            Files.writeString(path, content);
+
+            System.out.println("File modified successfully.");
+        } catch (IOException e) {
+            // Catch and print any file modification errors
+            System.out.println("Error modifying file: " + e.getMessage());
+        }
+    }
+
+    // Main method - program entry point
+    public static void main(String[] args) {
+        String fileName = "example.txt"; // Name of the file to work with
+
+        // Step 1: Content to write initially into the file
+        String content = "Hello, this is a sample file.\nWelcome to Java file operations.";
+        writeFile(fileName, content); // Write content to the file
+
+        // Step 2: Read and display file content
+        readFile(fileName);
+
+        // Step 3: Modify the file content (replace "Java" with "Awesome Java")
+        modifyFile(fileName, "Java", "Awesome Java");
+
+        // Step 4: Read the file again to show the updated content
+        readFile(fileName);
+    }
+}
